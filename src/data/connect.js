@@ -1,5 +1,8 @@
 const mongoose=require('mongoose');
 
+// register the models
+require('../models/Restaurant');
+
 const {
     DB_HOST,
     DB_PORT,

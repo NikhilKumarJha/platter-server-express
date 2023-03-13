@@ -4,9 +4,10 @@ require('./data/connect');
 const express=require('express');
 const path=require('path');
 
+const apiIndexRouter=require('./routes/api/v1/index');
+const apiRestaurantRouter=require('./routes/api/v1/restaurants');
 const uiIndexRouter=require('./routes/ui/index');
 const uiAboutRouter=require('./routes/ui/about');
-const apiIndexRouter=require('./routes/api/v1/index');
 const uiRestaurantRouter=require('./routes/ui/restaurants');
 
 const app=express();
@@ -18,6 +19,8 @@ app.set('title','Platter');
 
 app.use(express.static(path.join(process.cwd(),'public')));
 app.use('/api/v1',apiIndexRouter);
+app.use('/api/v1/restaurants',apiRestaurantRouter);
+
 app.use(uiIndexRouter);
 app.use(uiAboutRouter);
 app.use('/restaurants',uiRestaurantRouter);

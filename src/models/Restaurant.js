@@ -8,7 +8,7 @@ const restaurantSchema=new mongoose.Schema({
         required:true
     },
     slug:{  // "mad-about-pizza"
-        type:string,
+        type:String,
         unique:true,
         required:true
     },

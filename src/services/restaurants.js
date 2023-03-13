@@ -1,7 +1,8 @@
-const {restaurants}=require('../data/db.json');
+const mongoose=require('mongoose');
+const Restaurant=mongoose.model('Restaurant')
 
 const getRestaurants=()=>{
-    return restaurants;
+    return Restaurant.find();
 }
 
 module.exports={
