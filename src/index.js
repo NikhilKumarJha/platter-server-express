@@ -7,6 +7,7 @@ const path=require('path');
 const morgan=require('morgan');
 const logger=require('./middleware/logger');
 const winston=require('./middleware/winston.config');
+const {pageNotFound, apiNotFound}=require('./middleware/not-found');
 
 const apiIndexRouter=require('./routes/api/v1/index');
 const apiRestaurantRouter=require('./routes/api/v1/restaurants');
@@ -33,6 +34,9 @@ app.use('/api/v1/items',apiItemsRouter);
 app.use(uiIndexRouter);
 app.use(uiAboutRouter);
 app.use('/restaurants',uiRestaurantRouter);
+
+app.use('api',apiNotFound);
+app.use(pageNotFound);
 
 const PORT=process.env.PORT||3000;
 
