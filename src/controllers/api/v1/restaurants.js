@@ -186,11 +186,50 @@ const getRestaurantItemsByIdOrSlug=async (req,res)=>{
             message:'Internal Server Error'
         })
     }
+}
+
+const getRestaurantItemsSummaryByIdOrSlug=async(req,res)=>{
+    const {idOrSlug}=req.params; 
+    const {matchBy}=req.query;
+
+    let isSlug=(matchBy==='slug'?true:false);
+
+    let summary;
+
+    try{
+        if(!isSlug){
+            summary=await RestaurantService.getRestaurantItemsSummaryById(idOrSlug);
+        }else{
+            console.log("hi");
+            summary=await getRestaurantItemsSummaryByIdOrSlug(idOrSlug);
+        }
+        return res.json(
+            {
+                status:"success",
+                data:summary
+            }
+        )
+    }catch(err){
+        console.log(err);
+        if(err.name==='CastError'){
+            return res.status(404).json(
+                {
+                    status:'error',
+                    message:'Restaurant with given id does not exist'
+                }
+            )
+        }
+        return res.status(500).json({
+            status:'error',
+            message:'Internal Server Error'
+        })
+    }
 
 }
 
 module.exports={
     getRestaurants,
     getRestaurantByIdOrSlug,
-    getRestaurantItemsByIdOrSlug
+    getRestaurantItemsByIdOrSlug,
+    getRestaurantItemsSummaryByIdOrSlug
 }

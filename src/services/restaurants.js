@@ -1,6 +1,7 @@
 const mongoose=require('mongoose');
 const {PAGE_SIZE}=require('../config');
-const Restaurant=mongoose.model('Restaurant')
+const Restaurant=mongoose.model('Restaurant');
+const Item=mongoose.model('Item');
 
 // options={
 //     sort:{
@@ -55,8 +56,39 @@ const getRestaurantBySlug=(slug)=>{
     );
 }
 
+const getRestaurantItemsSummaryById=(id)=>{
+    return Item.aggregate(
+        [
+            {
+                $match:{
+                    restaurant:new mongoose.Types.ObjectId(id)
+                }
+            },
+            {
+                $group:{
+                    _id:'$cuisine',
+                    count:{
+                        $sum:1
+                    }
+                }
+            }
+        ]
+    )
+};
+
+const getRestaurantItemsSummaryBySlug=async(slug)=>{
+    const restaurant=await Restaurant.findOne(
+        {
+            slug:slug
+        }
+    )
+    return getRestaurantItemsSummaryById(restaurant._id);
+};
+
 module.exports={
     getRestaurants,
     getRestaurantById,
-    getRestaurantBySlug
+    getRestaurantBySlug,
+    getRestaurantItemsSummaryById,
+    getRestaurantItemsSummaryBySlug
 };
