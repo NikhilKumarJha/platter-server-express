@@ -1,12 +1,19 @@
 const mongoose=require('mongoose');
 const Restaurant=mongoose.model('Restaurant')
 
+// options={
+//     sort:{
+//         rating:'desc',
+//         name:'asc'
+//     }
+// }
+
 const getRestaurants=(options={})=>{
     const {sort}=options;
 
     const query= Restaurant.find();
     if(sort){
-        query.sort(sort); // sort={name:'asc'}
+        query.sort(sort); // sort={rating:'desc',name:'asc'}
     }
     return query.exec();
 }
