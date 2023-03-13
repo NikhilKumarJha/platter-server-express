@@ -1,13 +1,10 @@
 const express=require('express');
-const {getIndex,
-    postIndex,
-    // getBootstrapCss
-}=require('../../controllers/ui/index');
+const {
+    getRestaurants
+}=require('../../controllers/ui/restaurants');
 
 const router=express.Router();
 
-router.get('/',getIndex);
-router.post('/',postIndex);
-// router.get('/bootstrap/dist/css/bootstrap.min.css',getBootstrapCss)
+router.get('/',getRestaurants);
 
 module.exports=router;
