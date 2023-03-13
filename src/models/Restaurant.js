@@ -15,7 +15,7 @@ const restaurantSchema=new mongoose.Schema({
     description:{
         type:String,
         required:true,
-        minLenght:512
+        minLength:10
     },
     cuisines:{
         type:[String],

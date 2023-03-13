@@ -7,6 +7,7 @@ const path=require('path');
 const uiIndexRouter=require('./routes/ui/index');
 const uiAboutRouter=require('./routes/ui/about');
 const apiIndexRouter=require('./routes/api/v1/index');
+const uiRestaurantRouter=require('./routes/ui/restaurants');
 
 const app=express();
 
@@ -17,7 +18,9 @@ app.set('title','Platter');
 
 app.use(express.static(path.join(process.cwd(),'public')));
 app.use('/api/v1',apiIndexRouter);
-app.use(uiIndexRouter,uiAboutRouter);
+app.use(uiIndexRouter);
+app.use(uiAboutRouter);
+app.use('/restaurants',uiRestaurantRouter);
 
 const PORT=process.env.PORT||3000;
 
