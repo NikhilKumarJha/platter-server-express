@@ -9,6 +9,7 @@ const ItemService=require('../../../services/items');
 // api/v1/restaurants?sort=rating:desc,name:asc&cuisines=Italain,Mexican&min_CostForTwo=400&max_CostForTwo=1000&min_rating=4&page=2
 // api/v1/restaurants?sort=rating ->BAD REQUEST
 const getRestaurants=async (req,res)=>{
+    // console.log('inside controller = ',res.locals.recievedDate);
     const {
         sort,
         cuisines,
@@ -200,7 +201,6 @@ const getRestaurantItemsSummaryByIdOrSlug=async(req,res)=>{
         if(!isSlug){
             summary=await RestaurantService.getRestaurantItemsSummaryById(idOrSlug);
         }else{
-            console.log("hi");
             summary=await getRestaurantItemsSummaryByIdOrSlug(idOrSlug);
         }
         return res.json(
@@ -210,7 +210,7 @@ const getRestaurantItemsSummaryByIdOrSlug=async(req,res)=>{
             }
         )
     }catch(err){
-        console.log(err);
+        // console.log(err);
         if(err.name==='CastError'){
             return res.status(404).json(
                 {

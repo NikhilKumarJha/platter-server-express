@@ -10,6 +10,7 @@ const apiItemsRouter=require('./routes/api/v1/items');
 const uiIndexRouter=require('./routes/ui/index');
 const uiAboutRouter=require('./routes/ui/about');
 const uiRestaurantRouter=require('./routes/ui/restaurants');
+const logger=require('./middleware/logger');
 
 const app=express();
 
@@ -18,6 +19,7 @@ app.set('view engine','ejs');
 
 app.set('title','Platter');
 
+app.use(logger);
 app.use(express.static(path.join(process.cwd(),'public')));
 app.use('/api/v1',apiIndexRouter);
 app.use('/api/v1/restaurants',apiRestaurantRouter);
