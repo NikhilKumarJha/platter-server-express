@@ -4,9 +4,16 @@ const RestaurantService=require('../../../services/restaurants')
 // api/v1/restaurants?sort=name:asc
 // api/v1/restaurants?sort=rating:desc
 // api/v1/restaurants?sort=rating:desc,name:asc
+// api/v1/restaurants?sort=rating:desc,name:asc&cuisines=Italain,Mexican&min_CostForTwo=400&max_CostForTwo=1000&min_rating=4
 // api/v1/restaurants?sort=rating ->BAD REQUEST
 const getRestaurants=async (req,res)=>{
-    const {sort}=req.query; // req.query={sort:'rating:desc,name:asc'}; sort='rating:desc,name:asc'
+    const {
+        sort,
+        cuisines,
+        min_costForTwo,
+        max_costForTwo,
+        min_rating
+    }=req.query; // req.query={sort:'rating:desc,name:asc'}; sort='rating:desc,name:asc'
     const options={};
 
     if(sort){
@@ -24,6 +31,34 @@ const getRestaurants=async (req,res)=>{
             }
             options.sort[parts[0]]=parts[1];
         }   
+    }
+
+    if(cuisines){
+        options.where={
+            ...options.where,
+            cuisines:cuisines.split(',')
+        }
+    }
+
+    if(min_costForTwo){
+        options.where={
+            ...options.where,
+            min_costForTwo:min_costForTwo
+        }
+    }
+
+    if(max_costForTwo){
+        options.where={
+            ...options.where,
+            max_costForTwo:max_costForTwo
+        }
+    }
+
+    if(min_rating){
+        options.where={
+            ...options.where,
+            min_rating:min_rating
+        }
     }
 
     try{
