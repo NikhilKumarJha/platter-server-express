@@ -1,10 +1,11 @@
 const RestaurantService=require('../../../services/restaurants')
 
 // api/v1/restaurants
+// api/v1/restaurants?page=2
 // api/v1/restaurants?sort=name:asc
 // api/v1/restaurants?sort=rating:desc
 // api/v1/restaurants?sort=rating:desc,name:asc
-// api/v1/restaurants?sort=rating:desc,name:asc&cuisines=Italain,Mexican&min_CostForTwo=400&max_CostForTwo=1000&min_rating=4
+// api/v1/restaurants?sort=rating:desc,name:asc&cuisines=Italain,Mexican&min_CostForTwo=400&max_CostForTwo=1000&min_rating=4&page=2
 // api/v1/restaurants?sort=rating ->BAD REQUEST
 const getRestaurants=async (req,res)=>{
     const {
@@ -12,14 +13,17 @@ const getRestaurants=async (req,res)=>{
         cuisines,
         min_costForTwo,
         max_costForTwo,
-        min_rating
+        min_rating,
+        page
     }=req.query; // req.query={sort:'rating:desc,name:asc'}; sort='rating:desc,name:asc'
     const options={};
 
+
+    // sorting
     if(sort){
         options.sort={};
         
-        const fields=sort.split(','); // ['rating:desc','name:asc']
+        const fields=sort.split(','); // ['rating:desc','name:asc', 'page:2']
         
         for(let i=0;i<fields.length;i++){
             const parts=fields[i].split(':'); // ['name','asc']
@@ -33,6 +37,7 @@ const getRestaurants=async (req,res)=>{
         }   
     }
 
+    // filtering
     if(cuisines){
         options.where={
             ...options.where,
@@ -59,6 +64,14 @@ const getRestaurants=async (req,res)=>{
             ...options.where,
             min_rating:min_rating
         }
+    }
+
+    //pagination
+    const pageInt=parseInt(page,10);
+    if(!isNaN(pageInt)){
+        options.page=pageInt;
+    }else{
+        options.page=1
     }
 
     try{

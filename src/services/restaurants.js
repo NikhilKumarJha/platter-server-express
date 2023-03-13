@@ -1,4 +1,5 @@
 const mongoose=require('mongoose');
+const {PAGE_SIZE}=require('../config');
 const Restaurant=mongoose.model('Restaurant')
 
 // options={
@@ -12,10 +13,11 @@ const Restaurant=mongoose.model('Restaurant')
 //         max_CostForTwo:1000,
 //         min_rating:4
 //     }
+//     page:2
 // }
 
 const getRestaurants=(options={})=>{
-    const {sort, where}=options;
+    const {sort, where, page}=options;
 
     const query= Restaurant.find();
     if(sort){
@@ -33,6 +35,10 @@ const getRestaurants=(options={})=>{
     }
     if(where&&where.min_rating){
         query.where('rating').gte(where.min_rating);
+    }
+    if(page){
+        console.log("hi");
+        query.skip((PAGE_SIZE*(page-1))).limit(PAGE_SIZE);
     }
     return query.exec();
 }
