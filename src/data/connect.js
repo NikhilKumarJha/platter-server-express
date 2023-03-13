@@ -2,6 +2,7 @@ const mongoose=require('mongoose');
 
 // register the models
 require('../models/Restaurant');
+require('../models/Item');
 
 const {
     DB_HOST,
