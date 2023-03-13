@@ -1,8 +1,31 @@
 const RestaurantService=require('../../../services/restaurants')
 
+// api/v1/restaurants
+// api/v1/restaurants?sort=name:asc
+// api/v1/restaurants?sort=rating:desc
+// api/v1/restaurants?sort=rating ->BAD REQUEST
 const getRestaurants=async (req,res)=>{
+    const {sort}=req.query; // req.query={sort:'name:asc'}; sort='name:asc'
+    
+    const options={};
+
+    if(sort){
+        const parts=sort.split(':'); // ['name','asc']
+
+        if(parts.length!==2){
+            return res.status(400).json({
+                status:'error',
+                message:'The sort query string parameter is not in correct format. Example of right usage - ?sort=name:asc, ?sort=name:desc'
+            })
+        }
+
+        options.sort={
+            [parts[0]]:parts[1]
+        };
+    }
+
     try{
-        const restaurants=await RestaurantService.getRestaurants()
+        const restaurants=await RestaurantService.getRestaurants(options)
         return res.json(
             {
                 status:'success',
