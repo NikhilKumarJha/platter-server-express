@@ -31,6 +31,36 @@ const getItems=async(req,res)=>{
     }
 };
 
+const getItemById=async (req,res)=>{
+    const {id}=req.params;
+    try{
+        const item=await ItemsService.getItemsBYId(id);
+        if(!item){
+            return res.status(404).json({
+                status:"error",
+                message:"Item with given id does not exist"
+            })
+        }
+        return res.json({
+            status:'success',
+            data:item 
+        })
+    }catch(err){
+        if(err.name==='CastError'){
+            return res.status(404).json({
+                status:"error",
+                message:"Item with given id does not exist"
+            })
+            return;
+        }
+        return res.status(500).json({
+            status:"error",
+            message:err.message
+        })
+    }
+};
+
 module.exports={
-    getItems
+    getItems,
+    getItemById
 };
