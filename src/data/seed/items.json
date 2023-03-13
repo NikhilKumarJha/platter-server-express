@@ -8,7 +8,7 @@
         },
         "name": "Margherita Pizza",
         "cuisine": "Italian",
-        "price": 12.99,
+        "price": 123,
         "description": "Traditional Italian pizza topped with fresh mozzarella, tomato sauce, and basil.",
         "imageUrl": "public/images/restaurants/mad-about-pizza/items/pizza1.jpg"
     },
@@ -21,7 +21,7 @@
         },
         "name": "Pepperoni Pizza",
         "cuisine": "Thai",
-        "price": 9.99,
+        "price": 245,
         "description": "Classic pizza with tomato sauce, mozzarella cheese, and slices of spicy pepperoni.",
         "imageUrl": "public/images/restaurants/mad-about-pizza/items/pizza1.jpg"
     },
@@ -34,7 +34,7 @@
         },
         "name": "BBQ Chicken Pizza",
         "cuisine": "American",
-        "price": 15.99,
+        "price": 728,
         "description": "Pizza topped with barbecue sauce, mozzarella cheese, grilled chicken, and red onions.",
         "imageUrl": "public/images/restaurants/mad-about-pizza/items/pizza3.jpg"
     },
