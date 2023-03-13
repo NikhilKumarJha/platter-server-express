@@ -44,7 +44,7 @@ const getRestaurants=(options={})=>{
 }
 
 const getRestaurantById=(id)=>{
-    return Restaurant.findById(id);
+    return Restaurant.findById(id).populate('items');
 }
 
 const getRestaurantBySlug=(slug)=>{

@@ -48,6 +48,15 @@ const restaurantSchema=new mongoose.Schema({
     imageUrl:{
         type:String
     }
+},{
+    toJSON:{virtuals:true},
+    toObject:{virtuals:true}
+});
+
+restaurantSchema.virtual('items',{
+    ref:'Item',
+    localField:'_id',
+    foreignField:'restaurant'
 });
 
 mongoose.model('Restaurant',restaurantSchema);
