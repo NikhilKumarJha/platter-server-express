@@ -1,5 +1,6 @@
 const mongoose=require('mongoose');
 const Item=mongoose.model('Item');
+const Restaurant=mongoose.model('Restaurant');
 
 const {PAGE_SIZE}=require('../config');
 
@@ -12,6 +13,25 @@ const getItems=(options)=>{
     return query.exec();
 }
 
+const getRestaurantItemBySlug=async (slug)=>{
+    const restaurant=await Restaurant.findOne(
+        {
+            slug:slug
+        }
+    );
+    return getRestaurantItemById(restaurant._id);
+}
+
+const getRestaurantItemById=(id)=>{
+    return Item.find(
+        {
+            restaurant:id
+        }
+    )
+}
+
 module.exports={
-    getItems
+    getItems,
+    getRestaurantItemById,
+    getRestaurantItemBySlug
 };

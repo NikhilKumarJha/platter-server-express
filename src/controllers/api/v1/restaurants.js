@@ -1,4 +1,5 @@
-const RestaurantService=require('../../../services/restaurants')
+const RestaurantService=require('../../../services/restaurants');
+const ItemService=require('../../../services/items');
 
 // api/v1/restaurants
 // api/v1/restaurants?page=2
@@ -140,7 +141,56 @@ const getRestaurantByIdOrSlug=async (req,res)=>{
 
 }
 
+// GET api/v1/restaurants/:idOrSlug/items?matchBy=slug
+const getRestaurantItemsByIdOrSlug=async (req,res)=>{
+    // {idOrSlug:'mad-about-pizza}
+    const {idOrSlug}=req.params; 
+
+    // {matchBy:'slug'}
+    const {matchBy}=req.query;
+
+    let isSlug=(matchBy==='slug'?true:false);
+
+    let item;
+
+    try{
+        if(isSlug){
+            item=await ItemService.getRestaurantItemBySlug(idOrSlug);
+        }else{
+            item=await ItemService.getRestaurantItemById(idOrSlug);
+        }
+        if(!item||item.length==0){
+            return res.status(404).json(
+                {
+                    status:'error',
+                    message:'No items found for the restaurant'
+                }
+                )
+            }
+            
+        return res.json({
+            status:'success',
+            data:item
+        })
+    }catch(err){
+        if(err.name==='CastError'){
+            return res.status(404).json(
+                {
+                    status:'error',
+                    message:'Restaurant with given id does not exist'
+                }
+            )
+        }
+        res.status(500).json({
+            status:'error',
+            message:'Internal Server Error'
+        })
+    }
+
+}
+
 module.exports={
     getRestaurants,
-    getRestaurantByIdOrSlug
+    getRestaurantByIdOrSlug,
+    getRestaurantItemsByIdOrSlug
 }
