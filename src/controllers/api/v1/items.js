@@ -1,7 +1,8 @@
 const ItemsService=require('../../../services/items');
+const { getHttpError } = require('../../../utils/error');
 
 // GET /api/v1/items?page=2
-const getItems=async(req,res)=>{
+const getItems=async(req,res,next)=>{
     const {page}=req.query;
 
     const options={};
@@ -22,24 +23,16 @@ const getItems=async(req,res)=>{
             }
         );
     }catch(err){
-        return res.status(500).json(
-            {
-                status:'error',
-                message:err.message
-            }
-        );
+        return next(getHttpError(err.message,500));
     }
 };
 
-const getItemById=async (req,res)=>{
+const getItemById=async (req,res,next)=>{
     const {id}=req.params;
     try{
         const item=await ItemsService.getItemsBYId(id);
         if(!item){
-            return res.status(404).json({
-                status:"error",
-                message:"Item with given id does not exist"
-            })
+            return next(getHttpError("Item with given id does not exist",404));
         }
         return res.json({
             status:'success',
@@ -47,16 +40,9 @@ const getItemById=async (req,res)=>{
         })
     }catch(err){
         if(err.name==='CastError'){
-            return res.status(404).json({
-                status:"error",
-                message:"Item with given id does not exist"
-            })
-            return;
+            return next(getHttpError("Item with given id does not exist",404));
         }
-        return res.status(500).json({
-            status:"error",
-            message:err.message
-        })
+        return next(getHttpError(err.message,500));
     }
 };
 

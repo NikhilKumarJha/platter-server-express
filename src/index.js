@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./utils/error')
 require('./data/connect');
 
 const express=require('express');
@@ -8,6 +9,7 @@ const morgan=require('morgan');
 const logger=require('./middleware/logger');
 const winston=require('./middleware/winston.config');
 const {pageNotFound, apiNotFound}=require('./middleware/not-found');
+const errorHandler=require('./middleware/error');
 
 const apiIndexRouter=require('./routes/api/v1/index');
 const apiRestaurantRouter=require('./routes/api/v1/restaurants');
@@ -37,6 +39,8 @@ app.use('/restaurants',uiRestaurantRouter);
 
 app.use('api',apiNotFound);
 app.use(pageNotFound);
+
+app.use(errorHandler);
 
 const PORT=process.env.PORT||3000;
 

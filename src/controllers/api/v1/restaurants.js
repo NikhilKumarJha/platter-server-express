@@ -1,5 +1,6 @@
 const RestaurantService=require('../../../services/restaurants');
 const ItemService=require('../../../services/items');
+const { getHttpError } = require('../../../utils/error');
 
 // api/v1/restaurants
 // api/v1/restaurants?page=2
@@ -8,7 +9,7 @@ const ItemService=require('../../../services/items');
 // api/v1/restaurants?sort=rating:desc,name:asc
 // api/v1/restaurants?sort=rating:desc,name:asc&cuisines=Italain,Mexican&min_CostForTwo=400&max_CostForTwo=1000&min_rating=4&page=2
 // api/v1/restaurants?sort=rating ->BAD REQUEST
-const getRestaurants=async (req,res)=>{
+const getRestaurants=async (req,res,next)=>{
     // console.log('inside controller = ',res.locals.recievedDate);
     const {
         sort,
@@ -30,10 +31,7 @@ const getRestaurants=async (req,res)=>{
         for(let i=0;i<fields.length;i++){
             const parts=fields[i].split(':'); // ['name','asc']
             if(parts.length!==2){
-                return res.status(400).json({
-                    status:'error',
-                    message:'The sort query string parameter is not in correct format. Example of right usage - ?sort=name:asc, ?sort=name:desc'
-                })
+                return next(getHttpError("The sort query string parameter is not in correct format. Example of right usage - ?sort=name:asc, ?sort=name:desc",400));
             }
             options.sort[parts[0]]=parts[1];
         }   
@@ -85,17 +83,12 @@ const getRestaurants=async (req,res)=>{
             }
         )
     }catch(err){
-        res.status(500).json(
-            {
-                status:'error',
-                message:err.message
-            }
-        );
+        return next(getHttpError(err.message,500));
     }
 };
 
 // GET api/v1/restaurants/:idOrSlug?matchBy=slug
-const getRestaurantByIdOrSlug=async (req,res)=>{
+const getRestaurantByIdOrSlug=async (req,res,next)=>{
     // {idOrSlug:'mad-about-pizza}
     const {idOrSlug}=req.params; 
 
@@ -113,13 +106,8 @@ const getRestaurantByIdOrSlug=async (req,res)=>{
             restaurant=await RestaurantService.getRestaurantById(idOrSlug);
         }
         if(!restaurant){
-            return res.status(404).json(
-                {
-                    status:'error',
-                    message:'Restaurant with given id does not exist'
-                }
-                )
-            }
+            return next(getHttpError("Restaurant with given id does not exist",404));    
+        }
             
         return res.json({
             status:'success',
@@ -127,23 +115,15 @@ const getRestaurantByIdOrSlug=async (req,res)=>{
         })
     }catch(err){
         if(err.name==='CastError'){
-            return res.status(404).json(
-                {
-                    status:'error',
-                    message:'Restaurant with given id does not exist'
-                }
-            )
+            return next(getHttpError("Restaurant with given id does not exist",404));
         }
-        res.status(500).json({
-            status:'error',
-            message:'Internal Server Error'
-        })
+        return next(getHttpError("Internal Server Error",500));
     }
 
 }
 
 // GET api/v1/restaurants/:idOrSlug/items?matchBy=slug
-const getRestaurantItemsByIdOrSlug=async (req,res)=>{
+const getRestaurantItemsByIdOrSlug=async (req,res,next)=>{
     // {idOrSlug:'mad-about-pizza}
     const {idOrSlug}=req.params; 
 
@@ -161,13 +141,8 @@ const getRestaurantItemsByIdOrSlug=async (req,res)=>{
             item=await ItemService.getRestaurantItemById(idOrSlug);
         }
         if(!item||item.length==0){
-            return res.status(404).json(
-                {
-                    status:'error',
-                    message:'No items found for the restaurant'
-                }
-                )
-            }
+            return next(getHttpError("No Items found for the restaurant",404));
+        }
             
         return res.json({
             status:'success',
@@ -175,17 +150,9 @@ const getRestaurantItemsByIdOrSlug=async (req,res)=>{
         })
     }catch(err){
         if(err.name==='CastError'){
-            return res.status(404).json(
-                {
-                    status:'error',
-                    message:'Restaurant with given id does not exist'
-                }
-            )
+            return next(getHttpError("Restaurant with given id does not exist",404));
         }
-        res.status(500).json({
-            status:'error',
-            message:'Internal Server Error'
-        })
+        return next(getHttpError());
     }
 }
 
@@ -212,17 +179,9 @@ const getRestaurantItemsSummaryByIdOrSlug=async(req,res)=>{
     }catch(err){
         // console.log(err);
         if(err.name==='CastError'){
-            return res.status(404).json(
-                {
-                    status:'error',
-                    message:'Restaurant with given id does not exist'
-                }
-            )
+            return next(getHttpError("Restaurant with given id does not exist",404));
         }
-        return res.status(500).json({
-            status:'error',
-            message:'Internal Server Error'
-        })
+        return next(getHttpError());
     }
 
 }
