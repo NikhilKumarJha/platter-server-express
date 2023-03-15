@@ -1,5 +1,9 @@
 const mongoose=require('mongoose');
 
+//global settings
+mongoose.set('returnOriginal',false);
+mongoose.set('runValidators',true);
+
 // register the models
 require('../models/Restaurant');
 require('../models/Item');

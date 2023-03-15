@@ -86,8 +86,11 @@ const getRestaurantItemsSummaryBySlug=async(slug)=>{
 };
 
 const createRestaurant=(restaurant)=>{
-    // console.log("ok");
     return Restaurant.create(restaurant);
+}
+
+const updateRestaurant=(id,update)=>{
+    return Restaurant.findByIdAndUpdate(id,update);
 }
 
 module.exports={
@@ -96,5 +99,6 @@ module.exports={
     getRestaurantBySlug,
     getRestaurantItemsSummaryById,
     getRestaurantItemsSummaryBySlug,
-    createRestaurant
+    createRestaurant,
+    updateRestaurant
 };

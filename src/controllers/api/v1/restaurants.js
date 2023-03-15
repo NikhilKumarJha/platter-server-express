@@ -199,16 +199,39 @@ const postRestaurants=async(req,res,next)=>{
         if(err.name==='ValidationError'){
             return next(getHttpError(err.message,400));
         }
-        console.log("ok");
         return next(getHttpError());
     }
-
 };
+
+const patchRestaurants=async(req,res,next)=>{
+    const {id}=req.params;
+    const update=req.body;
+    try{
+        const updatedRestuarant=await RestaurantService.updateRestaurant(id,update);
+        console.log("hi");
+        if(!updatedRestuarant){
+            return next(getHttpError("Restaurant with given id does not exist",404));
+        }
+        res.json({
+            status:'success',
+            message:updatedRestuarant
+        })
+    }catch(err){
+        if(err.name==='CastError'){
+            return next(getHttpError(err.message,404));
+        }
+        if(err.name==='ValidationError'){
+            return next(getHttpError(err.message,400));
+        }
+        return next(getHttpError());
+    }
+}
 
 module.exports={
     getRestaurants,
     getRestaurantByIdOrSlug,
     getRestaurantItemsByIdOrSlug,
     getRestaurantItemsSummaryByIdOrSlug,
-    postRestaurants
+    postRestaurants,
+    patchRestaurants
 }
