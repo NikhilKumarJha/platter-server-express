@@ -199,6 +199,7 @@ const postRestaurants=async(req,res,next)=>{
         if(err.name==='ValidationError'){
             return next(getHttpError(err.message,400));
         }
+        console.log("ok");
         return next(getHttpError());
     }
 

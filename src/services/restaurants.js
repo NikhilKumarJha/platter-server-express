@@ -86,6 +86,7 @@ const getRestaurantItemsSummaryBySlug=async(slug)=>{
 };
 
 const createRestaurant=(restaurant)=>{
+    // console.log("ok");
     return Restaurant.create(restaurant);
 }
 

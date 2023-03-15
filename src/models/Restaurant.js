@@ -9,8 +9,7 @@ const restaurantSchema=new mongoose.Schema({
     },
     slug:{  // "mad-about-pizza"
         type:String,
-        unique:true,
-        required:true
+        unique:true
     },
     description:{
         type:String,
@@ -52,6 +51,15 @@ const restaurantSchema=new mongoose.Schema({
     id:false,
     toJSON:{virtuals:true},
     toObject:{virtuals:true}
+});
+
+const slugify=(text)=>{
+    return text.toString().trim().toLowerCase().replace(/\s+/g,'-');
+}
+
+restaurantSchema.pre('save',function(done){
+    this.slug=this.slug||slugify(this.name);
+    done();
 });
 
 restaurantSchema.virtual('items',{
