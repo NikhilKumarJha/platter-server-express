@@ -63,8 +63,32 @@ const postItem=async(req,res,next)=>{
     }
 }
 
+const patchItem=async(req,res,next)=>{
+    const {id}=req.params;
+    const update=req.body;
+    try{
+        const updatedItem=await ItemsService.updateItem(id,update);
+        if(!updatedItem){
+            return next(getHttpError("Item with given id does not exist",404));
+        }
+        res.json({
+            status:'success',
+            message:updatedItem
+        })
+    }catch(err){
+        if(err.name==='CastError'){
+            return next(getHttpError(err.message,404));
+        }
+        if(err.name==='ValidationError'){
+            return next(getHttpError(err.message,400));
+        }
+        return next(getHttpError());
+    }
+}
+
 module.exports={
     getItems,
     getItemById,
-    postItem
+    postItem,
+    patchItem
 };

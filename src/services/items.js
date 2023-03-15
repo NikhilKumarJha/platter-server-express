@@ -38,10 +38,15 @@ const addItem=(item)=>{
     return Item.create(item);
 };
 
+const updateItem=(id,update)=>{
+    return Item.findByIdAndUpdate(id,update);
+}
+
 module.exports={
     getItems,
     getRestaurantItemById,
     getRestaurantItemBySlug,
     getItemsBYId,
-    addItem
+    addItem,
+    updateItem
 };
