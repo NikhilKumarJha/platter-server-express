@@ -29,6 +29,10 @@ app.use(logger);
 app.use(morgan('combined',{stream:winston.stream}));
 
 app.use(express.static(path.join(process.cwd(),'public')));
+
+app.use(express.json());
+app.use(express.urlencoded({extended:false}));
+
 app.use('/api/v1',apiIndexRouter);
 app.use('/api/v1/restaurants',apiRestaurantRouter);
 app.use('/api/v1/items',apiItemsRouter);
