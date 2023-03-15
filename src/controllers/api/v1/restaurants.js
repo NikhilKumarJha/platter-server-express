@@ -248,6 +248,29 @@ const deleteRestaurants=async(req,res,next)=>{
     }
 }
 
+const postItemForRestaurantById=async(req,res,next)=>{
+    const item=req.body;
+    const {id}=req.params;
+    // console.log(id,item);
+
+    item.restaurant=id;
+
+    console.log(item);
+
+    try{
+        const newItem=await ItemService.addItem(item);
+        res.status(201).json({
+            status:'success',
+            data:newItem
+        });
+    }catch(err){
+        if(err.name==='ValidationError'){
+            return next(getHttpError(err.message,404));
+        }
+        return next(getHttpError(err.message,500));
+    }
+};
+
 module.exports={
     getRestaurants,
     getRestaurantByIdOrSlug,
@@ -255,5 +278,6 @@ module.exports={
     getRestaurantItemsSummaryByIdOrSlug,
     postRestaurants,
     patchRestaurants,
-    deleteRestaurants
+    deleteRestaurants,
+    postItemForRestaurantById
 }

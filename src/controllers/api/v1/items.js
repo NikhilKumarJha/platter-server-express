@@ -48,9 +48,9 @@ const getItemById=async (req,res,next)=>{
 
 const postItem=async(req,res,next)=>{
     const item=req.body;
-
     try{
         const newItem=await ItemsService.addItem(item);
+        // console.log("newItem",newItem);
         res.status(201).json({
             status:'success',
             data:newItem

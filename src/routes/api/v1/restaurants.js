@@ -6,7 +6,8 @@ const{
     getRestaurantItemsSummaryByIdOrSlug,
     postRestaurants,
     patchRestaurants,
-    deleteRestaurants
+    deleteRestaurants,
+    postItemForRestaurantById
 }=require('../../../controllers/api/v1/restaurants');
 
 const router=express.Router()
@@ -18,5 +19,6 @@ router.get('/:idOrSlug/items/summary',getRestaurantItemsSummaryByIdOrSlug);
 router.post('/',postRestaurants);
 router.patch('/:id',patchRestaurants);
 router.delete('/:id',deleteRestaurants);
+router.post('/:id/items',postItemForRestaurantById);
 
 module.exports=router;
