@@ -42,11 +42,16 @@ const updateItem=(id,update)=>{
     return Item.findByIdAndUpdate(id,update);
 }
 
+const removeItem=(id)=>{
+    return Item.findByIdAndDelete(id);
+}
+
 module.exports={
     getItems,
     getRestaurantItemById,
     getRestaurantItemBySlug,
     getItemsBYId,
     addItem,
-    updateItem
+    updateItem,
+    removeItem
 };

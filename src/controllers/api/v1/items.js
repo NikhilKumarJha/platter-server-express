@@ -86,9 +86,34 @@ const patchItem=async(req,res,next)=>{
     }
 }
 
+const deleteItem=async(req,res,next)=>{
+    console.log("ok");
+    const {id}=req.params;
+    console.log(id);
+    try{
+        const deletedItem=await ItemsService.removeItem(id);
+        if(!deletedItem){
+            return next(getHttpError("Item with given id does not exist",404));
+        }
+        res.json({
+            status:'success',
+            message:deletedItem
+        })
+    }catch(err){
+        if(err.name==='CastError'){
+            return next(getHttpError(err.message,404));
+        }
+        if(err.name==='ValidationError'){
+            return next(getHttpError(err.message,400));
+        }
+        return next(getHttpError());
+    }
+}
+
 module.exports={
     getItems,
     getItemById,
     postItem,
-    patchItem
+    patchItem,
+    deleteItem
 };
