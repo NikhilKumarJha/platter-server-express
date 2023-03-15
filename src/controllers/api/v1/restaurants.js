@@ -208,7 +208,6 @@ const patchRestaurants=async(req,res,next)=>{
     const update=req.body;
     try{
         const updatedRestuarant=await RestaurantService.updateRestaurant(id,update);
-        console.log("hi");
         if(!updatedRestuarant){
             return next(getHttpError("Restaurant with given id does not exist",404));
         }
@@ -227,11 +226,34 @@ const patchRestaurants=async(req,res,next)=>{
     }
 }
 
+const deleteRestaurants=async(req,res,next)=>{
+    const {id}=req.params;
+    try{
+        const deletedRestaurant=await RestaurantService.deleteRestaurant(id);
+        if(!deleteRestaurants){
+            return next(getHttpError("Restaurant with given id does not exist",404));
+        }   
+        res.json({
+            status:'success',
+            message:deletedRestaurant
+        })
+    }catch(err){
+        if(err.name==='CastError'){
+            return next(getHttpError(err.message,404));
+        }
+        if(err.name==='ValidationError'){
+            return next(getHttpError(err.message,400));
+        }
+        return next(getHttpError());
+    }
+}
+
 module.exports={
     getRestaurants,
     getRestaurantByIdOrSlug,
     getRestaurantItemsByIdOrSlug,
     getRestaurantItemsSummaryByIdOrSlug,
     postRestaurants,
-    patchRestaurants
+    patchRestaurants,
+    deleteRestaurants
 }

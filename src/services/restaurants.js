@@ -93,6 +93,10 @@ const updateRestaurant=(id,update)=>{
     return Restaurant.findByIdAndUpdate(id,update);
 }
 
+const deleteRestaurant=(id)=>{
+    return Restaurant.findByIdAndDelete(id);   
+}
+
 module.exports={
     getRestaurants,
     getRestaurantById,
@@ -100,5 +104,6 @@ module.exports={
     getRestaurantItemsSummaryById,
     getRestaurantItemsSummaryBySlug,
     createRestaurant,
-    updateRestaurant
+    updateRestaurant,
+    deleteRestaurant
 };
