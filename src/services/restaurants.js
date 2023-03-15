@@ -85,10 +85,15 @@ const getRestaurantItemsSummaryBySlug=async(slug)=>{
     return getRestaurantItemsSummaryById(restaurant._id);
 };
 
+const createRestaurant=(restaurant)=>{
+    return Restaurant.create(restaurant);
+}
+
 module.exports={
     getRestaurants,
     getRestaurantById,
     getRestaurantBySlug,
     getRestaurantItemsSummaryById,
-    getRestaurantItemsSummaryBySlug
+    getRestaurantItemsSummaryBySlug,
+    createRestaurant
 };

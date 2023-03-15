@@ -49,6 +49,7 @@ const restaurantSchema=new mongoose.Schema({
         type:String
     }
 },{
+    id:false,
     toJSON:{virtuals:true},
     toObject:{virtuals:true}
 });

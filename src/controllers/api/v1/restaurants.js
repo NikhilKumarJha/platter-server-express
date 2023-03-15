@@ -186,9 +186,28 @@ const getRestaurantItemsSummaryByIdOrSlug=async(req,res)=>{
 
 }
 
+const postRestaurants=async(req,res,next)=>{
+    const restaurant=req.body;
+    
+    try{
+        const createdRestaurant=await RestaurantService.createRestaurant(restaurant);
+        res.json({
+            status:'success',
+            message:createdRestaurant
+        })
+    }catch(err){
+        if(err.name==='ValidationError'){
+            return next(getHttpError(err.message,400));
+        }
+        return next(getHttpError());
+    }
+
+};
+
 module.exports={
     getRestaurants,
     getRestaurantByIdOrSlug,
     getRestaurantItemsByIdOrSlug,
-    getRestaurantItemsSummaryByIdOrSlug
+    getRestaurantItemsSummaryByIdOrSlug,
+    postRestaurants
 }
