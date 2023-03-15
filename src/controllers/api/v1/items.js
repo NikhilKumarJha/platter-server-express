@@ -46,7 +46,25 @@ const getItemById=async (req,res,next)=>{
     }
 };
 
+const postItem=async(req,res,next)=>{
+    const item=req.body;
+
+    try{
+        const newItem=await ItemsService.addItem(item);
+        res.status(201).json({
+            status:'success',
+            data:newItem
+        });
+    }catch(err){
+        if(err.name==='ValidationError'){
+            return next(getHttpError("Item with given id does not exist",404));
+        }
+        return next(getHttpError(err.message,500));
+    }
+}
+
 module.exports={
     getItems,
-    getItemById
+    getItemById,
+    postItem
 };

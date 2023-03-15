@@ -34,9 +34,14 @@ const getItemsBYId=(id)=>{
     return Item.findById(id).populate('restaurant');
 }
 
+const addItem=(item)=>{
+    return Item.create(item);
+};
+
 module.exports={
     getItems,
     getRestaurantItemById,
     getRestaurantItemBySlug,
-    getItemsBYId
+    getItemsBYId,
+    addItem
 };
